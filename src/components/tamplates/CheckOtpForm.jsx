@@ -5,6 +5,8 @@ import { checkOtp } from "services/auth";
 import { getProfile } from "src/services/user";
 import { setCookie } from "src/utils/ckookie";
 
+import styles from "./CheckOtpForm.module.css";
+
 function CheckOtpForm({ code, setCode, setStep, mobile }) {
   const {refetch} = useQuery(["profile"],getProfile);
   const navigate = useNavigate();
@@ -27,7 +29,7 @@ function CheckOtpForm({ code, setCode, setStep, mobile }) {
     console.log(code, mobile);
   };
   return (
-    <form onSubmit={submitHandler}>
+    <form onSubmit={submitHandler} className={styles.form}>
       <p>تایید کد پیامک شده</p>
       <sapn>کد پیامک شده به شماره به (({mobile})) را وارد کنید.</sapn>
       <label htmlFor="input">کد تایید را وارد کنید.</label>
@@ -39,7 +41,7 @@ function CheckOtpForm({ code, setCode, setStep, mobile }) {
         onChange={(e) => setCode(e.target.value)}
       />
       <button type="submit">تایید کد</button>
-      <button onClick={(e) => setStep(1)}>تغییر شماره موبایل</button>
+      <button className={styles.backButton} onClick={(e) => setStep(1)}>تغییر شماره موبایل</button>
     </form>
   );
 }
