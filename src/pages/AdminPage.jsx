@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
+import CategoryForm from "src/components/tamplates/CategoryForm";
 
 function AdminPage() {
-  return (
-    <div>AdminPage</div>
-  )
+  return <CategoryForm />;
 }
 
-export default AdminPage
+export default AdminPage;
