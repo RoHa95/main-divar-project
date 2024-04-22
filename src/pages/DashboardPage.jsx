@@ -1,9 +1,13 @@
 import React from 'react'
 import AddPost from 'src/components/tamplates/AddPost'
+import PostList from 'src/components/tamplates/PostList'
 
 function DashboardPage() {
   return (
-  <AddPost/>
+    <div>
+    <AddPost/>
+    <PostList/>
+    </div>
   )
 }
 

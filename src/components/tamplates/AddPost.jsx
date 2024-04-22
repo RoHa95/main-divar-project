@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { getCategory } from "src/services/admin";
+import toast, { Toaster } from "react-hot-toast";
 
 import styles from "./AddPost.module.css";
+import { getCookie } from "src/utils/ckookie";
+import axios from "axios";
 
 function AddPost() {
   const { data } = useQuery(["get-categories"], getCategory);
@@ -12,11 +15,11 @@ function AddPost() {
     category: "",
     city: "",
     amount: null,
-    image: null,
+    images: null,
   });
   const changeHandler = (e) => {
     const name = e.target.name;
-    if (name !== "image") {
+    if (name !== "images") {
       setForm({ ...form, [name]: e.target.value });
     } else {
       setForm({ ...form, [name]: e.target.files[0] });
@@ -24,9 +27,25 @@ function AddPost() {
     }
   };
   console.log(data);
+
   const addHandler = (e) => {
     e.preventDefault();
-    console.log(form);
+    const formData = new FormData();
+    for (let i in form) {
+      formData.append(i, form[i]);
+    }
+    console.log(formData);
+    const token = getCookie("accessToken");
+    axios
+      .post(`${import.meta.env.VITE_BASE_URL}post/create`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `bearer ${token}`,
+        },
+      })
+      .then((res) => toast.success(res.data.message))
+      .catch((error) => toast.error("مشکلی پیش امده است."));
+    console.log(formData);
   };
   return (
     <form onChange={changeHandler} className={styles.form}>
@@ -36,7 +55,7 @@ function AddPost() {
       <label htmlFor="content">توضیحات</label>
       <textarea name="content" id="content" />
       <label htmlFor="amount"> قیمت</label>
-      <input type="text" name="amount" id="amount" />
+      <input type="number" name="amount" id="amount" />
       <label htmlFor="city">شهر </label>
       <input type="text" name="city" id="city" />
       <label htmlFor="category">دسته بندی </label>
@@ -47,9 +66,10 @@ function AddPost() {
           </option>
         ))}
       </select>
-      <label htmlFor="image">عکس </label>
-      <input type="file" name="image" id="image" />
+      <label htmlFor="images">عکس </label>
+      <input type="file" name="images" id="images" />
       <button onClick={addHandler}>افزودن</button>
+      <Toaster/>
     </form>
   );
 }
