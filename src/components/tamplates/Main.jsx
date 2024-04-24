@@ -1,6 +1,6 @@
 import React from "react";
 import { sp } from "src/utils/numbers";
-
+import { Link } from "react-router-dom";
 import styles from "./Main.module.css";
 
 function Main({ posts }) {
@@ -9,7 +9,8 @@ function Main({ posts }) {
     <div className={styles.container}>
       {posts.data.posts.map((post) => (
         <div key={post._id} className={styles.card}>
-          <div className={styles.info}>
+         <Link to={`/dashboard/${post._id}`}>
+         <div className={styles.info}>
             <p>{post.options.title}</p>
             <div>
               <p>{sp(post.amount)} تومان</p>
@@ -20,6 +21,7 @@ function Main({ posts }) {
             src={`${import.meta.env.VITE_BASE_URL}${post.images[0]}`}
             alt=""
           />
+         </Link>
         </div>
       ))}
     </div>

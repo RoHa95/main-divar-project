@@ -1,0 +1,17 @@
+.photo{
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+    margin-right: 200px;
+}
+.container{
+    width: 100%;
+    display: flex;
+    margin:  auto ;
+    justify-content:center;
+    
+}
+.info{
+    margin-right: 30px;
+    margin-left: 200px;
+}

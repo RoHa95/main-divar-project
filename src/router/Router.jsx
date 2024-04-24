@@ -7,6 +7,7 @@ import AuthPage from "pages/AuthPage";
 import { useQuery } from "@tanstack/react-query";
 import { getProfile } from "src/services/user";
 import Loader from "src/components/modules/Loader";
+import DetailesPage from "src/pages/DetailesPage";
 
 function Router() {
   const { data, isLoading, error } = useQuery(["profile"], getProfile);
@@ -34,6 +35,7 @@ function Router() {
           )
         }
       />
+      <Route path="/dashboard/:id" element={<DetailesPage/>}/>
       <Route path="/*" element={<PageNotFound />} />
     </Routes>
   );
