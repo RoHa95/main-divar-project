@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { getCategory } from "src/services/admin";
 import toast, { Toaster } from "react-hot-toast";
@@ -6,8 +6,11 @@ import toast, { Toaster } from "react-hot-toast";
 import styles from "./AddPost.module.css";
 import { getCookie } from "src/utils/ckookie";
 import axios from "axios";
+import { getPosts } from "src/services/user";
+import { p2e } from "src/utils/numbers";
 
 function AddPost() {
+  const queryClient = useQueryClient();
   const { data } = useQuery(["get-categories"], getCategory);
   const [form, setForm] = useState({
     title: "",
@@ -21,6 +24,9 @@ function AddPost() {
     const name = e.target.name;
     if (name !== "images") {
       setForm({ ...form, [name]: e.target.value });
+    } else if (name === "amount") {
+      const amount = p2e(e.target.value);
+      setForm({...form, [name]: amount})
     } else {
       setForm({ ...form, [name]: e.target.files[0] });
       console.log(e.target.files[0]);
@@ -43,7 +49,10 @@ function AddPost() {
           Authorization: `bearer ${token}`,
         },
       })
-      .then((res) => toast.success(res.data.message))
+      .then((res) => {
+        toast.success(res.data.message);
+        queryClient.invalidateQueries("my-post-list");
+      })
       .catch((error) => toast.error("مشکلی پیش امده است."));
     console.log(formData);
   };
@@ -69,7 +78,7 @@ function AddPost() {
       <label htmlFor="images">عکس </label>
       <input type="file" name="images" id="images" />
       <button onClick={addHandler}>افزودن</button>
-      <Toaster/>
+      <Toaster />
     </form>
   );
 }
