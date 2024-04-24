@@ -1,10 +1,20 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 
 import styles from "./Header.module.css";
+import { deleteCookie } from "src/utils/ckookie";
+import { useQueryClient } from "@tanstack/react-query";
 
 function Header() {
   const [show, setShow] = useState(false);
+
+  const queryClient = useQueryClient();
+
+  const exiteHandler = () => {
+    deleteCookie();
+    setShow(!show);
+    queryClient.invalidateQueries(["profile"]);
+  };
   return (
     <header className={styles.header}>
       <div>
@@ -16,19 +26,27 @@ function Header() {
           <p>قم</p>
         </span>
       </div>
-      <div style={{position: "relative"}}>
-        <Link to="/auth">
+      <div style={{ position: "relative" }}>
+        <div>
           <span>
             <img src="profile.svg" />
-            <p onClick={() => setShow(!show)}>دیوار من</p>
+            <p onClick={() => setShow(!show)}>
+              دیوار من
+            </p>
           </span>
           {show && (
             <ul className={styles.navUl}>
-              <li>داشبورد</li>
-              <li>خروج</li>
+              <li
+                onClick={() => {
+                  setShow(!show);
+                }}
+              >
+                <Link to="/dashboard">داشبورد</Link>
+              </li>
+              <li onClick={exiteHandler}>خروج</li>
             </ul>
           )}
-        </Link>
+        </div>
         <Link to="/dashboard" className={styles.button}>
           ثبت آگهی
         </Link>

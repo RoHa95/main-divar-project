@@ -12,4 +12,14 @@ const getCookie = (cookieName) => {
     .find((token) => token.trim().split("=")[0] === cookieName)
     ?.split("=")[1];
 };
-export { setCookie, getCookie };
+
+const deleteCookie = () =>{
+  document.cookie = `accessToken=${null}; max-age=${
+    1 * 24 * 60 * 60
+  }`;
+  document.cookie = `refreshToken=${null}; max-age=${
+    30 * 24 * 60 * 60
+  }`;
+
+}
+export { setCookie, getCookie, deleteCookie };
