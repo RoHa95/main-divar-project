@@ -3,11 +3,14 @@ import { Link, Navigate } from "react-router-dom";
 
 import styles from "./Header.module.css";
 import { deleteCookie } from "src/utils/ckookie";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getProfile } from "src/services/user";
 
 function Header() {
   const [show, setShow] = useState(false);
-
+  const { data } = useQuery(["profile"], getProfile);
+  const role = data?.data.role;
+  // const role = "USER"
   const queryClient = useQueryClient();
 
   const exiteHandler = () => {
@@ -27,6 +30,7 @@ function Header() {
         </span>
       </div>
       <div style={{ position: "relative" }}>
+        {role==="ADMIN" && <button>پنل ادمین</button>}
         <div>
           <span>
             <img src="profile.svg" />

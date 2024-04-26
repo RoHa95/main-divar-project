@@ -6,12 +6,16 @@ import toast, { Toaster } from "react-hot-toast";
 import styles from "./AddPost.module.css";
 import { getCookie } from "src/utils/ckookie";
 import axios from "axios";
-import { getPosts } from "src/services/user";
+import { getAllPosts, getPosts } from "src/services/user";
 import { p2e } from "src/utils/numbers";
 
 function AddPost() {
   const queryClient = useQueryClient();
   const { data } = useQuery(["get-categories"], getCategory);
+  const { refetch } = useQuery(
+    ["all-post-list"],
+    getAllPosts
+  );
   const [form, setForm] = useState({
     title: "",
     content: "",
@@ -52,6 +56,8 @@ function AddPost() {
       .then((res) => {
         toast.success(res.data.message);
         queryClient.invalidateQueries("my-post-list");
+        // queryClient.invalidateQueries("all-post-list");
+        refetch();
       })
       .catch((error) => toast.error("مشکلی پیش امده است."));
     console.log(formData);

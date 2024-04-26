@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Loader from "src/components/modules/Loader";
 import Main from "src/components/tamplates/Main";
 import Sidebar from "src/components/tamplates/Sidebar";
@@ -20,9 +20,11 @@ function HomePage() {
     getCategory
   );
   const [cateData, setCatData] = useState([]);
+  const [show, setShow] = useState(false);
   console.log(cateData);
   const result = posts?.data.posts.filter((p) => p.category === cateData);
   console.log(result);
+
 
   return (
     <>
@@ -34,12 +36,15 @@ function HomePage() {
             cateData={cateData}
             setCatData={setCatData}
             categories={categories}
+            setShow={setShow}
           />
-          {cateData ? (
+          {/* {cateData ? (
             <CategoryPosts result={result} />
           ) : (
             <Main posts={posts} />
-          )}
+          )} */}
+          {cateData && <CategoryPosts result={result} />}
+          {!show && <Main posts={posts} />}
         </div>
       )}
     </>
